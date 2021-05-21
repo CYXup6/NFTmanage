@@ -1,0 +1,68 @@
+<script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-storage.js"></script>
+<script>
+  //window.location.href = "https://firebasestorage.googleapis.com/v0/b/nft-ipfs.appspot.com/o/userdata.json?alt=media";
+  const queryString = window.location.search;
+
+  const urlParams = new URLSearchParams(queryString);
+  const product = urlParams.get('product')
+
+
+  const color = urlParams.get('color')
+
+
+  const newUser = urlParams.get('newuser')
+
+  var firebaseConfig = {
+    apiKey: "AIzaSyC2rzsz1kE7UdS4J0xxl4s3dMM8pbgydgc",
+    authDomain: "nft-ipfs.firebaseapp.com",
+    projectId: "nft-ipfs",
+    storageBucket: "nft-ipfs.appspot.com",
+    messagingSenderId: "996214046998",
+    appId: "1:996214046998:web:edbc62a4388630b254d037"
+  };
+  firebase.initializeApp(firebaseConfig);
+
+  if(urlParams.has('init')){
+
+      var init = new Blob(["[]"], {
+      type: "application/json",
+      });
+      var storageRef = firebase.storage().ref('userdata.json');
+      
+      deleteFolderContents("");
+      setTimeout(function(){storageRef.put(init);},1000);
+
+  
+  }
+
+
+
+
+
+
+    function deleteFolderContents(path) {
+        const ref = firebase.storage().ref(path);
+        ref.listAll()
+          .then(dir => {
+            dir.items.forEach(fileRef => {
+              deleteFile(ref.fullPath, fileRef.name);
+            });
+            dir.prefixes.forEach(folderRef => {
+              deleteFolderContents(folderRef.fullPath);
+            })
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      }
+    function deleteFile(pathToFile, fileName) {
+        const ref = firebase.storage().ref(pathToFile);
+        const childRef = ref.child(fileName);
+        childRef.delete()
+      }
+
+
+
+  
+</script>
