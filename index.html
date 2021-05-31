@@ -29,9 +29,14 @@
       type: "application/json",
       });
       var storageRef = firebase.storage().ref('userdata.json');
-      
+
+      var lock = new Blob([], {
+      type: "application/octet-stream",
+      });
+      var lockRef = firebase.storage().ref('lock');
+
       deleteFolderContents("");
-      setTimeout(function(){storageRef.put(init);},1000);
+      setTimeout(function(){storageRef.put(init);lockRef.put(lock);},1000);
 
   
   }
